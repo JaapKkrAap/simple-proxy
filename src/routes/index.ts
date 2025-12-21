@@ -4,11 +4,7 @@ import {
   getAfterResponseHeaders,
   getBlacklistedHeaders,
 } from '@/utils/headers';
-import {
-  createTokenIfNeeded,
-  isAllowedToMakeRequest,
-  setTokenHeader,
-} from '@/utils/turnstile';
+import { createTokenIfNeeded, setTokenHeader } from '@/utils/turnstile';
 
 export default defineEventHandler(async (event) => {
   // handle cors, if applicable
@@ -24,15 +20,6 @@ export default defineEventHandler(async (event) => {
         message: `Proxy is working as expected (v${
           useRuntimeConfig(event).version
         })`,
-      },
-    });
-
-  if (!(await isAllowedToMakeRequest(event)))
-    return await sendJson({
-      event,
-      status: 401,
-      data: {
-        error: 'Invalid or missing token',
       },
     });
 
